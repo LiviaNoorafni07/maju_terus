@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Yajra\DataTables\Facades\DataTables;
+
 //import model product
 use App\Models\Product; 
 
@@ -182,4 +184,30 @@ class ProductController extends Controller
         //redirect to index
         return redirect()->route('products.index')->with(['success' => 'Data Berhasil Dihapus!']);
     }
+
+
+
+public function majuterus()
+{
+    // Ambil data dari tabel products
+    $model = Product::select(['id', 'image', 'title', 'price', 'stock', 'created_at']);
+
+    return DataTables::of($model)
+        ->addColumn('actions', function($row) {
+            return '
+                <a href="'.route('products.show', $row->id).'" class="btn btn-sm btn-primary">Show</a>
+                <a href="'.route('products.edit', $row->id).'" class="btn btn-sm btn-warning">Edit</a>
+                <form action="'.route('products.destroy', $row->id).'" method="POST" style="display:inline;">
+                    '.csrf_field().'
+                    '.method_field('DELETE').'
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">Delete</button>
+                </form>
+            ';
+        })
+        ->rawColumns(['actions'])
+        ->toJson();
+}
+
+
+    
 }

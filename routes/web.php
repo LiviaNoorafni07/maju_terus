@@ -16,6 +16,11 @@ use app\Http\Controllers\ItemController;
 |
 */
 
+use App\Http\Controllers\ProductController;
+
+Route::get('/products/data', [ProductController::class, 'majuterus'])->name('products.data');
+
+
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::get('/login-prosses', [LoginController::class, 'index'])->name('login-prosses');
 
